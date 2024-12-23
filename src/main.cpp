@@ -1,3 +1,5 @@
+#define ALLEGRO_NO_MAGIC_MAIN
+
 #include <iostream>
 #include <fmt/core.h>
 #include <string>
@@ -236,4 +238,6 @@ int main()
     disp_deinit();
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
+
+    return 0;
 }

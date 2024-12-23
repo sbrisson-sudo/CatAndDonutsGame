@@ -9,7 +9,6 @@
 class Cat : public Object {
 private:
     int color;
-    int speed;
     bool walking;
     static SpriteSheet* shared_sprite_sheet;
     std::string name;
