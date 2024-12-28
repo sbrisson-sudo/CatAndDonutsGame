@@ -51,7 +51,7 @@ void LoveAnimation::draw() {
 
     int x_draw = this->x;
     int y_draw = this->y + std::sin((float)(timer)/8)*3;
-    int z_order = this->y + 30;
+    int z_order = this->y + 50;
 
     new DrawOrder(x_draw, y_draw, z_order, bitmap); 
 

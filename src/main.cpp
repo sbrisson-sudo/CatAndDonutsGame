@@ -119,6 +119,7 @@ int main()
 
     Cat::readSpriteSheet();
     Cat* cat1 = new Cat(416, 1064, 2, "Muis");
+    // Cat* cat1 = new Cat(36, 1304, 2, "Muis");
     Cat* cat2 = new Cat(656, 824, 3, "Nala");
 
     Donut::readSpriteSheet();

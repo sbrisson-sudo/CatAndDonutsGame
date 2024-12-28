@@ -143,7 +143,7 @@ void Player::update() {
 
             // hud.writeDebugText("Petting the cat...");
             if (Animation::GetNbAnimations() == 0)
-                new LoveAnimation(this->is_facing->getX() - 10, this->is_facing->getY() - 32);
+                new LoveAnimation(this->is_facing->getX()-5, this->is_facing->getY() - 32);
 
 
             if (!muis_pet && (cat->getName() == "Muis"))
