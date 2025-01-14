@@ -49,9 +49,9 @@ void LoveAnimation::draw() {
         exit(1);
     }
 
-    int x_draw = this->x;
-    int y_draw = this->y + std::sin((float)(timer)/8)*3;
-    int z_order = this->y + 50;
+    int x_draw = attached_object->getPos().x - 5;
+    int y_draw = attached_object->getPos().y - 32 + std::sin((float)(timer)/8)*3;
+    int z_order = attached_object->getPos().y - 32 + 50;
 
     new DrawOrder(x_draw, y_draw, z_order, bitmap); 
 

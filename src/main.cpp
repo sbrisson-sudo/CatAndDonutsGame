@@ -118,9 +118,11 @@ int main()
     player.readSpriteSheet();
 
     Cat::readSpriteSheet();
-    Cat* cat1 = new Cat(416, 1064, 2, "Muis");
-    // Cat* cat1 = new Cat(36, 1304, 2, "Muis");
-    Cat* cat2 = new Cat(656, 824, 3, "Nala");
+    // Cat* cat1 = new Cat(416, 1064, 2, "Muis");
+    // Cat* cat2 = new Cat(656, 824, 3, "Nala");
+
+    Cat* cat1 = new Cat(36, 1304, 2, "Muis");
+    Cat* cat2 = new Cat(156, 1304, 3, "Nala");
 
     Donut::readSpriteSheet();
 
@@ -173,6 +175,8 @@ int main()
             case ALLEGRO_EVENT_TIMER:
 
                 player.update();
+                cat1->update();
+                cat2->update();
 
                 // hud.update();
                 // hud.writeDebugText(fmt::format("Collision {}", player.collision()));

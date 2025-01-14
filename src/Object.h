@@ -7,11 +7,11 @@
 
 #include "HelperTools.h"
 #include "Sprite.h"
+#include "Vector2d.h"
 
 class Object {
 protected:
-    int x;
-    int y;
+    Vector2D pos;
     std::string id;
     SpriteSheet* sprites;
     enum Direction direction;
@@ -25,17 +25,17 @@ protected:
 
 public:
     // Constructor
-    Object() : x(0), y(0), sprites(nullptr), is_facing(nullptr){
+    Object() : pos(0,0), sprites(nullptr), is_facing(nullptr){
         objects_list.push_back(this);
     };
     Object(int x, int y, std::string id) 
-        : x(x), y(y), id(id), sprites(nullptr), is_facing(nullptr){
+        : pos(x,y), id(id), sprites(nullptr), is_facing(nullptr){
             objects_list.push_back(this);
         }
 
     // Copy constructor
     Object(const Object& other) 
-        : x(other.x), y(other.y), id(other.id), 
+        : pos(other.pos), id(other.id), 
           sprites(other.sprites), collision_width(other.collision_width), collision_height(other.collision_height),is_facing(nullptr){
         objects_list.push_back(this);
     }
@@ -62,9 +62,13 @@ public:
     void setCollisionHeight(int height) { collision_height = height; };    
     void setDirection(Direction dir) { direction = dir; };
 
-    // Getters for coordinates and dimensions
-    int getX() const { return x; };
-    int getY() const { return y; };
+    // Remove from object list (to not be taken into account in collisions)
+    static void removeFromCollisionList(Object* obj);
+
+    // Getters for coordinates and dimension
+    Vector2D getPos() const { return pos; };
+    int getX() const { return pos.x; };
+    int getY() const { return pos.y; };
 
     void deinit_sprites();
 

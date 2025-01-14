@@ -26,10 +26,10 @@ bool Object::collision() {
         int obj_W = obj->collision_width;
         int obj_H = obj->collision_height;
 
-        if ((x + this_W/2) < (obj->x - obj_W/2))  continue;
-        if ((x - this_W/2) > (obj->x + obj_W/2))  continue;
-        if (y  < (obj->y - obj_H))  continue;
-        if ((y - this_H)  > obj->y)  continue;
+        if ((pos.x + this_W/2) < (obj->pos.x - obj_W/2))  continue;
+        if ((pos.x - this_W/2) > (obj->pos.x + obj_W/2))  continue;
+        if (pos.y  < (obj->pos.y - obj_H))  continue;
+        if ((pos.y - this_H)  > obj->pos.y)  continue;
 
         // Inside the bounding box = collision
         is_facing = obj;
@@ -40,5 +40,9 @@ bool Object::collision() {
 
 bool Object::checkId(std::string checked_id){
     return this->id == checked_id;
+}
+
+void Object::removeFromCollisionList(Object* obj){
+    objects_list.erase(find(objects_list.begin(), objects_list.end(), obj));
 }
 

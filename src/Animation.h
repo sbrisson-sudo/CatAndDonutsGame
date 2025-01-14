@@ -2,21 +2,19 @@
 #define ANIMATIONS_H
 
 #include "Sprite.h"
+#include "Object.h"
 
 class Animation {
 
 protected:
-    int x,y ;  
+    Object* attached_object = nullptr;
     int timer;
     int duration; // duration in frames
 
     static std::vector<Animation*> animation_list;
 
 public:
-    Animation() : x(0), y(0), timer(0), duration(0){
-        animation_list.push_back(this);
-    }
-    Animation(int x, int y, int duration) : x(x), y(y), timer(0), duration(duration){
+    Animation(Object* obj, int duration) : attached_object(obj), timer(0), duration(duration){
         animation_list.push_back(this);
     }
 
@@ -33,7 +31,7 @@ private:
     static ALLEGRO_BITMAP* bitmap;
 
 public:
-    LoveAnimation(int x, int y) : Animation(x, y, 3*30) {};
+    LoveAnimation(Object* object) : Animation(object, 3*30) {};
     static void readSpriteSheet();
     static void deinitSprite();
     void draw() override;

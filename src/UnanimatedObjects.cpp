@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "UnanimatedObjects.h"
 #include "DrawOrders.h"
 
@@ -30,9 +32,9 @@ void Donut::update() {
 }
 
 void Donut::draw() {
-    int x_draw = this->x - sprites->width/2;
-    int y_draw = this->y - sprites->height;
-    int z_order = this->y;
+    int x_draw = round(this->pos.x) - sprites->width/2;
+    int y_draw = round(this->pos.y) - sprites->height;
+    int z_order = round(this->pos.y);
     ALLEGRO_BITMAP* bitmap = sprites->get("donuts", color);
     new DrawOrder(x_draw, y_draw, z_order, bitmap); 
 }
@@ -68,9 +70,9 @@ void Bush::update() {
 }
 
 void Bush::draw() {
-    int x_draw = this->x - sprites->width/2;
-    int y_draw = this->y - sprites->height;
-    int z_order = this->y;
+    int x_draw = round(this->pos.x) - sprites->width/2;
+    int y_draw = round(this->pos.y) - sprites->height;
+    int z_order = round(this->pos.y);
     ALLEGRO_BITMAP* bitmap = sprites->get("bush");
     new DrawOrder(x_draw, y_draw, z_order, bitmap); 
 }
@@ -105,9 +107,9 @@ void Chest::update() {
 }
 
 void Chest::draw() {
-    int x_draw = this->x - sprites->width/2;
-    int y_draw = this->y - sprites->height;
-    int z_order = this->y;
+    int x_draw = round(this->pos.x) - sprites->width/2;
+    int y_draw = round(this->pos.y) - sprites->height;
+    int z_order = round(this->pos.y);
     ALLEGRO_BITMAP* bitmap;
     if (opened) {
         bitmap = sprites->get("opened");

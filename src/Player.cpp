@@ -3,6 +3,8 @@
 #include <filesystem>
 #include <iostream>
 #include <fmt/core.h>
+#include <cmath>
+
 
 
 #include "Player.h"
@@ -65,39 +67,39 @@ void Player::update() {
 
     if(keyboard.get(ALLEGRO_KEY_LEFT)){
         dx = -speed;
-        x -= speed;
+        pos.x -= speed;
         direction = LEFT;
         walking = true;
     }    
     if(keyboard.get(ALLEGRO_KEY_RIGHT)){
         dx = speed;
-        x += speed;
+        pos.x += speed;
         direction = RIGHT;
         walking = true;
     }    
     if(keyboard.get(ALLEGRO_KEY_UP)){
         dy = -speed;
-        y -= speed;
+        pos.y -= speed;
         direction = BACK;
         walking = true;
     }
     if(keyboard.get(ALLEGRO_KEY_DOWN)){
         dy = speed;
-        y += speed;
+        pos.y += speed;
         direction = FRONT;
         walking = true;
     }
 
     // Check collision with world boundaries
-    if(x < sprites->width/2)
-        x = sprites->width/2;
-    if(y < sprites->height)
-        y = sprites->height;
+    if(pos.x < sprites->width/2)
+        pos.x = sprites->width/2;
+    if(pos.y < sprites->height)
+        pos.y = sprites->height;
 
-    if(x > WORLD_W - sprites->width/2)
-        x = WORLD_W - sprites->width/2;
-    if(y > WORLD_H)
-        y = WORLD_H;
+    if(pos.x > WORLD_W - sprites->width/2)
+        pos.x = WORLD_W - sprites->width/2;
+    if(pos.y > WORLD_H)
+        pos.y = WORLD_H;
 
     // If moving : reset the is_facing pointer
     if ( (dx != 0) || (dy != 0)){
@@ -108,8 +110,8 @@ void Player::update() {
     // Check collision with other objects
     if (this->collision()){
         walking = false;
-        x -= dx;
-        y -= dy;
+        pos.x -= dx;
+        pos.y -= dy;
     }
 
     // Interactions with cats
@@ -117,7 +119,9 @@ void Player::update() {
         
         Cat* cat = dynamic_cast<Cat*>(this->is_facing);
 
-        hud.writePanelMessage(fmt::format("You have found {} ! Press SPACE to pet her", cat->getName()));
+        // Display a pet message if hasn't been found yet
+        if ( (!muis_pet && (cat->getName() == "Muis")) || (!nala_pet && (cat->getName() == "Nala")))
+            hud.writePanelMessage(fmt::format("You have found {} ! Press SPACE to pet her", cat->getName()));
 
         // Changing cat direction
         Direction cat_direction;
@@ -141,17 +145,31 @@ void Player::update() {
         // Adding the pet animation
         if(keyboard.get(ALLEGRO_KEY_SPACE)){
 
-            // hud.writeDebugText("Petting the cat...");
-            if (Animation::GetNbAnimations() == 0)
-                new LoveAnimation(this->is_facing->getX()-5, this->is_facing->getY() - 32);
+            // if (Animation::GetNbAnimations() == 0)
+            //     new LoveAnimation(this->is_facing);
 
-
-            if (!muis_pet && (cat->getName() == "Muis"))
+            new LoveAnimation(this->is_facing);
+            
+            if (!muis_pet && (cat->getName() == "Muis")){
                 muis_pet = true;
-
-            if (!nala_pet && (cat->getName() == "Nala"))
+                cat->add_attached_object(this, (pos - cat->getPos()).l2Norm());
+                // If nala already pet we attached the two together
+                if (nala_pet){
+                    Cat* nala = Cat::getCatByName("Nala");
+                    cat->add_attached_object(nala, (pos - cat->getPos()).l2Norm()/2);
+                    nala->add_attached_object(cat, (pos - cat->getPos()).l2Norm()/2);
+                }
+            }
+            if (!nala_pet && (cat->getName() == "Nala")){
                 nala_pet = true;
-
+                cat->add_attached_object(this, (pos - cat->getPos()).l2Norm());
+                // You got it
+                if (muis_pet){
+                    Cat* muis = Cat::getCatByName("Muis");
+                    cat->add_attached_object(muis, (pos - cat->getPos()).l2Norm()/2);
+                    muis->add_attached_object(cat, (pos - cat->getPos()).l2Norm()/2);
+                }
+            }
         }
     }
 
@@ -192,7 +210,7 @@ void Player::update() {
 
 
     // Update coordinates of buffer
-    DrawOrder::set_buffer_coordinates(x - BUFFER_W/2, y - BUFFER_H/2);
+    DrawOrder::set_buffer_coordinates(pos.x - BUFFER_W/2, pos.y - BUFFER_H/2);
 }
 
 void Player::draw() {
@@ -206,9 +224,9 @@ void Player::draw() {
         bitmap = sprites->get("idle", direction);
     }
 
-    int x_draw = this->x - sprites->width/2;
-    int y_draw = this->y - sprites->height;
-    int z_order = this->y;
+    int x_draw = round(this->pos.x) - sprites->width/2;
+    int y_draw = round(this->pos.y) - sprites->height;
+    int z_order = round(this->pos.y);
 
     new DrawOrder(x_draw, y_draw, z_order, bitmap); 
 }

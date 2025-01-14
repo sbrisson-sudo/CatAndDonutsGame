@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <cmath>
 
 #include "Barrier.h"
 #include "DrawOrders.h"
@@ -72,9 +73,9 @@ void Barrier::update() {
 void Barrier::draw() {
     ALLEGRO_BITMAP* bitmap;
     bitmap = sprites->get("barrier", connectivity);
-    int x_draw = this->x - sprites->width/2;
-    int y_draw = this->y - sprites->height;
-    int z_order = this->y;
+    int x_draw = round(this->pos.x) - sprites->width/2;
+    int y_draw = round(this->pos.y) - sprites->height;
+    int z_order = round(this->pos.y);
     new DrawOrder(x_draw, y_draw, z_order, bitmap); 
 }
 
